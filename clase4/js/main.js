@@ -16,8 +16,8 @@ const getUsers = () => {
         htmlOut = htmlOut + `<td>${item.email}</td>`;
         htmlOut = htmlOut + `<td>${item.firstName}</td>`;
         htmlOut = htmlOut + `<td>${item.lastName}</td>`;
-        htmlOut = htmlOut + `<td><input type="button" class="btn btn-warning" value="edit" /></td>`;
-        htmlOut = htmlOut + `<td><input type="button" class="btn btn-danger" value="delete" onclick="deleteUser('${item.email}')" /></td>`;
+        htmlOut = htmlOut + `<td><input type="button" class="btn btn-warning btn-sm" value="edit" onclick="editUser('${item.email}')" /></td>`;
+        htmlOut = htmlOut + `<td><input type="button" class="btn btn-danger btn-sm" value="delete" onclick="deleteUser('${item.email}')" /></td>`;
         htmlOut = htmlOut + '</tr>';
     });
     htmlOut = htmlOut + '</table>';
@@ -70,4 +70,42 @@ const indexUser = (email) => {
 
     // Esta nos retorna un valor boolean true cuando encuentra un valor
     // return usersList.some(item => item.email === email);
+}
+
+const editUser = (email) => {
+    let user = usersList.find(filter => filter.email === email);
+    if(!user) {
+        alert('El usuario no existe.');
+    }
+    else {
+        document.getElementById('email').value = user.email;
+        document.getElementById('firstName').value = user.firstName;
+        document.getElementById('lastName').value = user.lastName;
+        
+        document.getElementById('email').disabled = true;
+        
+        document.getElementById('addButton').style.display = 'none';
+        document.getElementById('updateButton').style.display = '';
+    }
+}
+
+const updateUser = (email, firstName, lastName) => {
+    let index = indexUser(email);
+    if(index === -1) {
+        alert('El usuario no existe.');
+    }
+    else {
+        usersList[index].firstName = firstName;
+        usersList[index].lastName = lastName;
+
+        getUsers();
+
+        document.getElementById('email').disabled = false;
+        document.getElementById('email').value = '';
+        document.getElementById('firstName').value = '';
+        document.getElementById('lastName').value = '';
+        
+        document.getElementById('addButton').style.display = '';
+        document.getElementById('updateButton').style.display = 'none';
+    }
 }
