@@ -7,21 +7,7 @@ usersList.push({
 });
 
 const getUsers = () => {
-    let htmlOut = '<table class="table">';
-    htmlOut = htmlOut + '<tr>';
-    htmlOut = htmlOut + '<th>Email</th><th>First name</th><th>Last name</th><th></th><th></th>';
-    htmlOut = htmlOut + '</tr>';
-    usersList.forEach(item => {
-        htmlOut = htmlOut + '<tr>';
-        htmlOut = htmlOut + `<td>${item.email}</td>`;
-        htmlOut = htmlOut + `<td>${item.firstName}</td>`;
-        htmlOut = htmlOut + `<td>${item.lastName}</td>`;
-        htmlOut = htmlOut + `<td><input type="button" class="btn btn-warning btn-sm" value="edit" onclick="editUser('${item.email}')" /></td>`;
-        htmlOut = htmlOut + `<td><input type="button" class="btn btn-danger btn-sm" value="delete" onclick="deleteUser('${item.email}')" /></td>`;
-        htmlOut = htmlOut + '</tr>';
-    });
-    htmlOut = htmlOut + '</table>';
-    document.getElementById('userTable').innerHTML = htmlOut;
+    drawTable(usersList);
 }
 
 const getUsersDestructuring = () => {
@@ -53,7 +39,7 @@ const deleteUser = (email) => {
         alert('El usuario no existe')
     } else {
         if(confirm('Esta seguro?') === true) {
-            usersList.splice(index);
+            usersList.splice(index, 1);
             getUsers();
         }
     }
@@ -108,4 +94,34 @@ const updateUser = (email, firstName, lastName) => {
         document.getElementById('addButton').style.display = '';
         document.getElementById('updateButton').style.display = 'none';
     }
+}
+
+const changeUpper = (control) => {
+    control.value = control.value.toUpperCase();
+}
+
+const searchButton = (search) => {
+    drawTable(usersList.filter(filter => 
+        filter.email.toUpperCase().includes(search.toUpperCase()) ||
+        filter.firstName.toUpperCase().includes(search.toUpperCase()) ||
+        filter.lastName.toUpperCase().includes(search.toUpperCase())
+        ));
+}
+
+const drawTable = (list) => {
+    let htmlOut = '<table class="table">';
+    htmlOut = htmlOut + '<tr>';
+    htmlOut = htmlOut + '<th>Email</th><th>First name</th><th>Last name</th><th></th><th></th>';
+    htmlOut = htmlOut + '</tr>';
+    list.forEach(item => {
+        htmlOut = htmlOut + '<tr>';
+        htmlOut = htmlOut + `<td>${item.email}</td>`;
+        htmlOut = htmlOut + `<td>${item.firstName}</td>`;
+        htmlOut = htmlOut + `<td>${item.lastName}</td>`;
+        htmlOut = htmlOut + `<td><input type="button" class="btn btn-warning btn-sm" value="edit" onclick="editUser('${item.email}')" /></td>`;
+        htmlOut = htmlOut + `<td><input type="button" class="btn btn-danger btn-sm" value="delete" onclick="deleteUser('${item.email}')" /></td>`;
+        htmlOut = htmlOut + '</tr>';
+    });
+    htmlOut = htmlOut + '</table>';
+    document.getElementById('userTable').innerHTML = htmlOut;
 }
