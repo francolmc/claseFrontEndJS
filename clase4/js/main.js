@@ -17,6 +17,9 @@ const addUser = (email, firstName, lastName) => {
     if(indexUser(email) !== -1) {
         alert('El email ingresado ya se encuentra registrado.')
     }
+    else if (!validateRequired()) {
+        alert('Los campos son requeridos')
+    }    
     else {
         usersList.push({
             email,
@@ -94,7 +97,7 @@ const searchButton = (search) => {
 }
 
 const drawTable = (list) => {
-    let htmlOut = '<table class="table">';
+    let htmlOut = '<table class="table table-striped table-hover">';
     htmlOut = htmlOut + '<tr>';
     htmlOut = htmlOut + '<th>Email</th><th>First name</th><th>Last name</th><th></th><th></th>';
     htmlOut = htmlOut + '</tr>';
@@ -122,4 +125,11 @@ const cleanInputs = () => {
     document.getElementById('email').value = '';
     document.getElementById('firstName').value = '';
     document.getElementById('lastName').value = '';
+}
+
+const validateRequired = () => {
+    if (document.getElementById('email').value === '') return false;
+    if (document.getElementById('firstName').value === '') return false;
+    if (document.getElementById('lastName').value === '') return false;
+    return true;
 }
