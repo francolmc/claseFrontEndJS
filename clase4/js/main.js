@@ -1,11 +1,5 @@
 const usersList = [];
 
-usersList.push({
-    email: 'franco@superrito.cl',
-    firstName: 'Franco',
-    lastName: 'Morales'
-});
-
 const getUsers = () => {
     drawTable(usersList);
 }
@@ -23,6 +17,9 @@ const addUser = (email, firstName, lastName) => {
     if(indexUser(email) !== -1) {
         alert('El email ingresado ya se encuentra registrado.')
     }
+    else if (!validateRequired()) {
+        alert('Los campos son requeridos')
+    }    
     else {
         usersList.push({
             email,
@@ -30,6 +27,7 @@ const addUser = (email, firstName, lastName) => {
             lastName
         });
         getUsers();
+        cleanInputs();
     }
 }
 
@@ -67,11 +65,7 @@ const editUser = (email) => {
         document.getElementById('email').value = user.email;
         document.getElementById('firstName').value = user.firstName;
         document.getElementById('lastName').value = user.lastName;
-        
-        document.getElementById('email').disabled = true;
-        
-        document.getElementById('addButton').style.display = 'none';
-        document.getElementById('updateButton').style.display = '';
+        editAction();
     }
 }
 
@@ -85,14 +79,8 @@ const updateUser = (email, firstName, lastName) => {
         usersList[index].lastName = lastName;
 
         getUsers();
-
-        document.getElementById('email').disabled = false;
-        document.getElementById('email').value = '';
-        document.getElementById('firstName').value = '';
-        document.getElementById('lastName').value = '';
-        
-        document.getElementById('addButton').style.display = '';
-        document.getElementById('updateButton').style.display = 'none';
+        cleanInputs();
+        editAction();
     }
 }
 
@@ -109,7 +97,7 @@ const searchButton = (search) => {
 }
 
 const drawTable = (list) => {
-    let htmlOut = '<table class="table">';
+    let htmlOut = '<table class="table table-striped table-hover">';
     htmlOut = htmlOut + '<tr>';
     htmlOut = htmlOut + '<th>Email</th><th>First name</th><th>Last name</th><th></th><th></th>';
     htmlOut = htmlOut + '</tr>';
@@ -124,4 +112,24 @@ const drawTable = (list) => {
     });
     htmlOut = htmlOut + '</table>';
     document.getElementById('userTable').innerHTML = htmlOut;
+}
+
+const editAction = () => {
+    document.getElementById('email').disabled = document.getElementById('email').disabled ? false : true;
+    
+    document.getElementById('addButton').style.display = document.getElementById('addButton').style.display === 'none' ? '' : 'none';
+    document.getElementById('updateButton').style.display = document.getElementById('updateButton').style.display === '' ? 'none': '';
+}
+
+const cleanInputs = () => {
+    document.getElementById('email').value = '';
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+}
+
+const validateRequired = () => {
+    if (document.getElementById('email').value === '') return false;
+    if (document.getElementById('firstName').value === '') return false;
+    if (document.getElementById('lastName').value === '') return false;
+    return true;
 }
